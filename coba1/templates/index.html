@@ -1,0 +1,185 @@
+{% extends 'base.html' %} {% block title %}Beranda - Khodimulharamain{% endblock
+%} {% block content %}
+<!-- Hero Section dengan Auto-Slider -->
+<section
+  class="relative overflow-hidden rounded-xl shadow-lg max-w-7xl mx-auto my-8"
+  data-aos="fade-up"
+>
+  <div class="relative h-[500px] md:h-[500px]">
+    <div
+      class="absolute inset-0 transition-opacity duration-100 opacity-100 slide active"
+    >
+      <img
+        src="{{ url_for('static', filename='img/d1.jpg') }}"
+        alt="Slide 1"
+        class="w-full h-full object-cover"
+      />
+      <div
+        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <h1 class="text-3xl md:text-5xl font-bold text-white text-center">
+          Selamat Datang di Khodimulharamain
+        </h1>
+      </div>
+    </div>
+    <div
+      class="absolute inset-0 transition-opacity duration-100 opacity-0 slide"
+    >
+      <img
+        src="{{ url_for('static', filename='img/d2.jpg') }}"
+        alt="Slide 2"
+        class="w-full h-full object-cover"
+      />
+      <div
+        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <h1 class="text-3xl md:text-5xl font-bold text-white text-center">
+          Perjalanan Spiritual Anda Dimulai Di Sini
+        </h1>
+      </div>
+    </div>
+    <div
+      class="absolute inset-0 transition-opacity duration-100 opacity-0 slide"
+    >
+      <img
+        src="{{ url_for('static', filename='img/d3.jpg') }}"
+        alt="Slide 3"
+        class="w-full h-full object-cover"
+      />
+      <div
+        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      >
+        <h1 class="text-3xl md:text-5xl font-bold text-white text-center">
+          Pelayanan Terbaik untuk Jamaah
+        </h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Visi dan Misi -->
+<section class="mb-16" data-aos="fade-up">
+  <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6">
+    Visi & Misi
+  </h2>
+  <div class="grid md:grid-cols-2 gap-8">
+    <div class="bg-white shadow-md rounded-xl p-6">
+      <h3 class="text-xl font-bold mb-2">Visi</h3>
+      <p>
+        Menjadi organisasi pemuda yang terdepan dalam mengembangkan potensi
+        generasi muda melalui nilai-nilai keagamaan, sosial, dan pendidikan
+        untuk kemajuan masyarakat.
+      </p>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-6">
+      <h3 class="text-xl font-bold mb-2">Misi</h3>
+      <ul class="list-disc pl-5 space-y-2">
+        <li>Memberdayakan pemuda melalui kegiatan keagamaan dan sosial</li>
+        <li>Menyediakan layanan Haji dan Umroh terpercaya</li>
+        <li>Mengembangkan program edukatif untuk masyarakat</li>
+        <li>Membangun jaringan kerjasama yang kuat</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Keunggulan -->
+<section class="mb-16" data-aos="fade-up">
+  <h2 class="text-2xl md:text-3xl font-semibold text-center mb-8">
+    Kenapa Memilih Kami?
+  </h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    {% set features = [ ('bx bx-restaurant', 'Makan 3X Sehari', 'Makanan bergizi
+    dengan menu bervariasi selama perjalanan'), ('bx bx-certification',
+    'Sertifikat Umroh', 'Dokumen resmi sebagai kenang-kenangan ibadah Anda'),
+    ('bx bx-check-shield', 'Visa Kemendagri', 'Proses visa dijamin sampai
+    jadi'), ('bx bx-group', 'Grup Kecil', 'Pelayanan lebih fokus dan personal'),
+    ('bx bx-guide', 'Pembimbing Ahli', 'Tim pembimbing berpengalaman'), ('bx
+    bx-hotel', 'Akomodasi Nyaman', 'Hotel bintang 3-4 dekat masjid'), ('bx
+    bx-bus', 'Transportasi Eksklusif', 'Bus khusus selama di Tanah Suci'), ('bx
+    bx-money', 'Harga Terjangkau', 'Paket lengkap dengan harga kompetitif') ] %}
+    {% for icon, title, desc in features %}
+    <div class="bg-white shadow-md p-4 rounded-xl text-center">
+      <div class="text-4xl text-blue-600 mb-2"><i class="{{ icon }}"></i></div>
+      <h4 class="font-semibold">{{ title }}</h4>
+      <p class="text-sm text-gray-600">{{ desc }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Layanan Kami -->
+<section class="mb-16" data-aos="fade-up">
+  <h2 class="text-2xl md:text-3xl font-semibold text-center mb-8">
+    Layanan Kami
+  </h2>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+      <img
+        src="{{ url_for('static', filename='img/l1.jpg') }}"
+        class="w-full h-90 object-cover"
+      />
+      <div class="p-4">
+        <h3 class="font-bold text-lg mb-2">Umroh</h3>
+        <p class="text-sm text-gray-600">
+          Paket umroh dengan pilihan sesuai kebutuhan dan budget. Dilengkapi
+          pembimbing.
+        </p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+      <img
+        src="{{ url_for('static', filename='img/l1.jpg') }}"
+        class="w-full h-90 object-cover"
+      />
+      <div class="p-4">
+        <h3 class="font-bold text-lg mb-2">Haji</h3>
+        <p class="text-sm text-gray-600">
+          Layanan haji khusus dengan fasilitas terbaik dan bimbingan spiritual
+          yang mendalam.
+        </p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+      <img
+        src="{{ url_for('static', filename='img/l1.jpg') }}"
+        class="w-full h-90 object-cover"
+      />
+      <div class="p-4">
+        <h3 class="font-bold text-lg mb-2">Konsultasi</h3>
+        <p class="text-sm text-gray-600">
+          Konsultasi gratis persiapan ibadah haji dan umroh, manasik, dan
+          dokumen.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section
+  class="bg-blue-500 text-white py-12 rounded-xl text-center mb-16"
+  data-aos="fade-up"
+>
+  <h2 class="text-3xl font-bold mb-4">
+    Siap Memulai Perjalanan Spiritual Anda?
+  </h2>
+  <p class="mb-6">
+    Hubungi kami sekarang untuk konsultasi gratis dan penawaran terbaik.
+  </p>
+  <div class="flex flex-col md:flex-row justify-center gap-4">
+    <a
+      href="https://wa.me/6285607094599"
+      target="_blank"
+      class="bg-white text-blue-600 px-6 py-2 rounded-md font-semibold hover:bg-gray-100"
+      ><i class="bx bxl-whatsapp"></i> WhatsApp</a
+    >
+    <a
+      href="{{ url_for('produk') }}"
+      class="bg-white text-blue-600 px-6 py-2 rounded-md font-semibold hover:bg-gray-100"
+      >Lihat Paket</a
+    >
+  </div>
+</section>
+
+{% endblock %}

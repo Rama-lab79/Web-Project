@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}Kelola Paket - Khodimulharamain{% endblock %}
+{% block content %}
+<section class="max-w-6xl mx-auto py-8">
+  <h2 class="text-2xl font-bold mb-6">Kelola Paket Haji & Umroh</h2>
+
+  <!-- Form Tambah Paket -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h3 class="text-xl font-semibold mb-4">Tambah Paket Baru</h3>
+    <form id="tambahPaketForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block mb-1 font-medium">Nama Paket</label>
+        <input type="text" id="namaPaket" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Durasi (hari)</label>
+        <input type="number" id="durasiPaket" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block mb-1 font-medium">Deskripsi</label>
+        <textarea id="deskripsiPaket" class="w-full border rounded px-3 py-2" rows="3" required></textarea>
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Harga</label>
+        <input type="number" id="hargaPaket" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Gambar</label>
+        <input type="file" id="gambarPaket" class="w-full border rounded px-3 py-2" accept="image/*">
+      </div>
+      <div class="md:col-span-2">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Tambah Paket
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Daftar Paket -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h3 class="text-xl font-semibold mb-4">Daftar Paket</h3>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b">Nama</th>
+            <th class="py-2 px-4 border-b">Durasi</th>
+            <th class="py-2 px-4 border-b">Harga</th>
+            <th class="py-2 px-4 border-b">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for paket in paket_umroh %}
+          <tr>
+            <td class="py-2 px-4 border-b">{{ paket.nama }}</td>
+            <td class="py-2 px-4 border-b">{{ paket.durasi }} hari</td>
+            <td class="py-2 px-4 border-b">Rp{{ "{:,}".format(paket.harga).replace(",", ".") }}</td>
+            <td class="py-2 px-4 border-b">
+              <button 
+                class="bg-yellow-500 text-white px-2 py-1 rounded text-sm edit-btn"
+                data-id="{{ paket.id }}"
+                data-nama="{{ paket.nama }}"
+                data-durasi="{{ paket.durasi }}"
+                data-harga="{{ paket.harga }}"
+                data-deskripsi="{{ paket.deskripsi }}">
+                Edit
+              </button>
+              <button class="bg-red-600 text-white px-2 py-1 rounded text-sm ml-2">Hapus</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Modal Edit Paket -->
+<div id="modalEditPaket" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+    <h3 class="text-xl font-semibold mb-4">Edit Paket</h3>
+    <form id="editPaketForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input type="hidden" id="editId">
+      <div>
+        <label class="block mb-1 font-medium">Nama Paket</label>
+        <input type="text" id="editNama" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Durasi (hari)</label>
+        <input type="number" id="editDurasi" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block mb-1 font-medium">Deskripsi</label>
+        <textarea id="editDeskripsi" class="w-full border rounded px-3 py-2" rows="3" required></textarea>
+      </div>
+      <div>
+        <label class="block mb-1 font-medium">Harga</label>
+        <input type="number" id="editHarga" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div class="md:col-span-2 text-right">
+        <button type="button" class="text-gray-600 mr-4" onclick="closeModal()">Batal</button>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('tambahPaketForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append('nama', document.getElementById('namaPaket').value);
+  formData.append('durasi', document.getElementById('durasiPaket').value);
+  formData.append('deskripsi', document.getElementById('deskripsiPaket').value);
+  formData.append('harga', document.getElementById('hargaPaket').value);
+  formData.append('file', document.getElementById('gambarPaket').files[0]);
+
+  try {
+    const response = await fetch('/admin/tambah_paket', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (data.status === 'success') {
+      alert('Paket berhasil ditambahkan');
+      location.reload();
+    } else {
+      alert('Gagal menambahkan paket: ' + (data.message || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Terjadi kesalahan. Silakan coba lagi.');
+  }
+});
+
+// Modal & Edit
+function closeModal() {
+  document.getElementById('modalEditPaket').classList.add('hidden');
+}
+
+document.querySelectorAll('.edit-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('editId').value = btn.getAttribute('data-id');
+    document.getElementById('editNama').value = btn.getAttribute('data-nama');
+    document.getElementById('editDurasi').value = btn.getAttribute('data-durasi');
+    document.getElementById('editHarga').value = btn.getAttribute('data-harga');
+    document.getElementById('editDeskripsi').value = btn.getAttribute('data-deskripsi');
+    document.getElementById('modalEditPaket').classList.remove('hidden');
+  });
+});
+
+document.getElementById('editPaketForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const id = document.getElementById('editId').value;
+  const data = {
+    nama: document.getElementById('editNama').value,
+    durasi: document.getElementById('editDurasi').value,
+    harga: document.getElementById('editHarga').value,
+    deskripsi: document.getElementById('editDeskripsi').value
+  };
+
+  try {
+    const response = await fetch(`/admin/update_paket/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    if (result.status === 'success') {
+      alert('Paket berhasil diupdate');
+      location.reload();
+    } else {
+      alert('Gagal mengupdate paket');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Terjadi kesalahan');
+  }
+});
+</script>
+{% endblock %}

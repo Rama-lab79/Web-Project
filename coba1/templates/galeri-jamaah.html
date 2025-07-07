@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Galeri Jamaah - Khodimulharamain{% endblock %}
+{% block content %}
+<section class="mb-16" data-aos="fade-up">
+  <h2 class="text-3xl font-bold text-center mb-4">Galeri Jamaah</h2>
+  <p class="text-center text-gray-600 mb-10">
+    Dokumentasi perjalanan spiritual jamaah kami selama Haji & Umroh
+  </p>
+
+  <div class="max-w-4xl mx-auto">
+    {% if foto_list %}
+    <div class="relative mb-4">
+      <div
+        class="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-md text-sm z-10"
+        id="gallery-counter"
+      >
+        1 / {{ foto_list | length }}
+      </div>
+      <div class="overflow-hidden rounded-xl shadow-md">
+        <img
+          id="mainImage"
+          src="{{ url_for('static', filename='img/' + foto_list[0]) }}"
+          alt="Jamaah"
+          class="w-full h-[300px] md:h-[500px] object-cover"
+        />
+      </div>
+    </div>
+
+    <!-- Thumbnail Navigation -->
+    <div class="flex justify-center items-center gap-2 mb-6">
+      <button
+        id="prevBtn"
+        class="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+      >
+        <i class="bx bx-chevron-left text-xl"></i>
+      </button>
+      <div id="thumbnails" class="flex overflow-x-auto gap-2 py-2">
+        {% for foto in foto_list %}
+        <img
+          src="{{ url_for('static', filename='img/' + foto) }}"
+          alt="Jamaah"
+          class="thumbnail w-24 h-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-blue-500"
+        />
+        {% endfor %}
+      </div>
+      <button
+        id="nextBtn"
+        class="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+      >
+        <i class="bx bx-chevron-right text-xl"></i>
+      </button>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-500">Belum ada foto yang tersedia.</p>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  const thumbnails = document.querySelectorAll('.thumbnail');
+  const mainImage = document.getElementById('mainImage');
+  const counter = document.getElementById('gallery-counter');
+  let currentIndex = 0;
+
+  function updateMainImage(index) {
+    if (index >= 0 && index < thumbnails.length) {
+      currentIndex = index;
+      mainImage.src = thumbnails[index].src;
+      counter.textContent = `${index + 1} / ${thumbnails.length}`;
+    }
+  }
+
+  thumbnails.forEach((thumb, index) => {
+    thumb.addEventListener('click', () => updateMainImage(index));
+  });
+
+  document.getElementById('prevBtn')?.addEventListener('click', () => {
+    updateMainImage(currentIndex - 1);
+  });
+
+  document.getElementById('nextBtn')?.addEventListener('click', () => {
+    updateMainImage(currentIndex + 1);
+  });
+</script>
+{% endblock %}

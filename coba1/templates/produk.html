@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block title %}Paket Haji & Umroh -
+Khodimulharamain{% endblock %} {% block content %}
+<section class="mb-12" data-aos="fade-up">
+  <div class="text-center max-w-2xl mx-auto">
+    <h2 class="text-3xl font-bold mb-4">Paket Haji & Umroh</h2>
+    <p class="text-gray-600">
+      Pilih paket terbaik yang sesuai kebutuhan dan kenyamanan Anda
+    </p>
+  </div>
+</section>
+
+<section
+  class="mb-16 max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+  data-aos="fade-up"
+  data-aos-delay="100"
+>
+  {% for paket in paket_umroh %}
+  <div
+    class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-5 flex flex-col"
+  >
+    <img
+      src="{{ url_for('static', filename='img/' + paket.image) }}"
+      alt="{{ paket.nama }}"
+      class="rounded-lg h-80 object-cover mb-4"
+    />
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ paket.nama }}</h3>
+    <p class="text-sm text-gray-500 mb-3">Durasi: {{ paket.durasi }} hari</p>
+    <p class="text-gray-600 flex-grow">{{ paket.deskripsi }}</p>
+    <div class="mt-4">
+      <span class="text-lg font-bold text-blue-600">
+        Rp{{ "{:,}".format(paket.harga)|replace(",", ".") }}
+      </span>
+    </div>
+    <a
+      href="https://wa.me/6285607094599?text=Halo, saya tertarik dengan paket {{ paket.nama }}"
+      target="_blank"
+      class="mt-4 inline-block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition"
+    >
+      Pesan Sekarang
+    </a>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

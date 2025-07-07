@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Kelola Galeri - Khodimulharamain{% endblock %}
+{% block content %}
+<section class="max-w-6xl mx-auto py-8">
+  <h2 class="text-2xl font-bold mb-6">Kelola Galeri Jamaah</h2>
+  
+  <!-- Form Upload Foto -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h3 class="text-xl font-semibold mb-4">Upload Foto Baru</h3>
+    <form id="uploadFotoForm" class="flex items-end gap-4">
+      <div class="flex-grow">
+        <label class="block mb-1 font-medium">Pilih Foto</label>
+        <input type="file" id="fotoGaleri" class="w-full border rounded px-3 py-2" accept="image/*" required>
+      </div>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Upload
+      </button>
+    </form>
+  </div>
+
+  <!-- Daftar Foto -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h3 class="text-xl font-semibold mb-4">Daftar Foto</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      {% for foto in foto_list %}
+      <div class="relative group">
+        <img src="{{ url_for('static', filename='img/' + foto) }}" 
+             class="w-full h-32 object-cover rounded-lg">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+          <button 
+            class="bg-red-600 text-white p-1 rounded-full delete-btn" 
+            data-foto="{{ foto }}">
+            <i class='bx bx-trash'></i>
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Script Upload -->
+<script>
+document.getElementById('uploadFotoForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const fileInput = document.getElementById('fotoGaleri');
+  if (fileInput.files.length === 0) {
+    alert('Silakan pilih file foto terlebih dahulu');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
+  
+  try {
+    const response = await fetch('/admin/upload_foto', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (data.status === 'success') {
+      alert('Foto berhasil diupload');
+      location.reload();
+    } else {
+      alert('Gagal mengupload foto: ' + (data.message || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Terjadi kesalahan. Silakan coba lagi.');
+  }
+});
+</script>
+
+<!-- Script Hapus -->
+<script>
+document.querySelectorAll('.delete-btn').forEach(btn => {
+  btn.addEventListener('click', async function () {
+    const filename = this.getAttribute('data-foto');
+    if (confirm(`Yakin ingin menghapus foto "${filename}"?`)) {
+      try {
+        const res = await fetch('/admin/hapus_foto', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ filename })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert('Foto berhasil dihapus');
+          location.reload();
+        } else {
+          alert('Gagal menghapus foto: ' + (data.message || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan saat menghapus foto');
+        console.error(err);
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

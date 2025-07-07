@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Testimoni Jamaah - Khodimulharamain{% endblock %}
+
+{% block content %}
+<section class="text-center py-12">
+  <h2 class="text-3xl font-bold mb-4">Testimoni Jamaah</h2>
+  <p class="text-gray-600 max-w-xl mx-auto">
+    Berikut adalah pengalaman para jamaah yang telah bergabung bersama Khodimulharamain.
+  </p>
+</section>
+
+<section class="max-w-4xl mx-auto px-4">
+  <form id="testimonialForm" class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h3 class="text-xl font-semibold mb-4">Tulis Testimoni</h3>
+    <div class="mb-4">
+      <label for="name" class="block mb-1 font-medium">Nama</label>
+      <input type="text" id="name" class="w-full border rounded px-3 py-2" required />
+    </div>
+    <div class="mb-4">
+      <label for="title" class="block mb-1 font-medium">Judul</label>
+      <input type="text" id="title" class="w-full border rounded px-3 py-2" required />
+    </div>
+    <div class="mb-4">
+      <label for="message" class="block mb-1 font-medium">Pesan</label>
+      <textarea id="message" class="w-full border rounded px-3 py-2" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      Kirim
+    </button>
+  </form>
+
+  <div id="testimonialsContainer" class="grid gap-6">
+    {% for testimonial in testimonials %}
+    <div class="testimonial-card bg-white p-4 rounded-lg shadow hover:shadow-md" data-id="{{ testimonial.id }}">
+      <h4 class="font-semibold text-lg">{{ testimonial.title }}</h4>
+      <p class="text-gray-700 italic my-2">"{{ testimonial.message }}"</p>
+      <p class="text-sm text-gray-500">- {{ testimonial.name }}, {{ testimonial.date }}</p>
+      <div class="mt-2 space-x-2">
+        <button
+          class="edit-btn bg-yellow-500 text-white px-3 py-1 rounded"
+          onclick="openEditModal({{ testimonial.id }}, '{{ testimonial.name }}', '{{ testimonial.title }}', `{{ testimonial.message | escape }}`)">
+          Edit
+        </button>
+
+        {% if current_user.is_authenticated and current_user.role == 'admin' %}
+        <button
+          class="delete-btn bg-red-600 text-white px-3 py-1 rounded"
+          onclick="deleteTestimonial({{ testimonial.id }})">
+          Hapus
+        </button>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Modal Edit -->
+<div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+    <h3 class="text-xl font-semibold mb-4">Edit Testimoni</h3>
+    <div class="mb-4">
+      <label for="editName" class="block mb-1 font-medium">Nama</label>
+      <input type="text" id="editName" class="w-full border rounded px-3 py-2" required />
+    </div>
+    <div class="mb-4">
+      <label for="editTitle" class="block mb-1 font-medium">Judul</label>
+      <input type="text" id="editTitle" class="w-full border rounded px-3 py-2" required />
+    </div>
+    <div class="mb-4">
+      <label for="editMessage" class="block mb-1 font-medium">Pesan</label>
+      <textarea id="editMessage" class="w-full border rounded px-3 py-2" rows="4" required></textarea>
+    </div>
+    <div class="flex justify-end space-x-2">
+      <button onclick="closeEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+      <button onclick="submitEdit()" class="bg-blue-600 text-white px-4 py-2 rounded">Simpan</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/testimonials.js') }}"></script>
+{% endblock %}

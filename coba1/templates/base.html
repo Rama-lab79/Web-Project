@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Beranda{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font: Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+
+    <!-- AOS.js -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <!-- Boxicons -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="container mx-auto flex items-center justify-between p-4">
+        <div class="flex items-center space-x-4">
+          <img
+            src="{{ url_for('static', filename='img/logo.png') }}"
+            alt="Logo"
+            class="w-12 h-12 object-contain"
+          />
+          <h1 class="text-xl font-semibold">Khodimulharamain Tour & Travel</h1>
+        </div>
+        
+        <!-- Menu Navigasi + Login -->
+        <nav class="hidden md:flex space-x-6 items-center">
+          <a href="{{ url_for('index') }}" class="hover:text-blue-600">Home</a>
+          <a href="{{ url_for('produk') }}" class="hover:text-blue-600">Paket</a>
+          <a href="{{ url_for('tentang') }}" class="hover:text-blue-600">Tentang Kami</a>
+          <a href="{{ url_for('galeri_jamaah') }}" class="hover:text-blue-600">Galeri Jamaah</a>
+          <a href="{{ url_for('testimoni') }}" class="hover:text-blue-600">Testimonial</a>
+          
+          {% if current_user.is_authenticated %}
+            <!-- Dropdown Menu Admin (Click-based) -->
+            <div class="relative">
+              <button id="adminButton" class="flex items-center space-x-1 hover:text-blue-600">
+                <i class='bx bx-user-circle text-xl'></i>
+                <span>Admin</span>
+                <i class='bx bx-chevron-down'></i>
+              </button>
+              <div id="adminDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden z-50">
+                <a href="/admin/paket" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">
+                  <i class='bx bx-package mr-2'></i>Kelola Paket
+                </a>
+                <a href="/admin/galeri" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">
+                  <i class='bx bx-image-alt mr-2'></i>Kelola Galeri
+                </a>
+                <div class="border-t border-gray-200"></div>
+                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">
+                  <i class='bx bx-log-out mr-2'></i>Logout
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <!-- Tombol Login -->
+            <a href="{{ url_for('login') }}" class="flex items-center hover:text-blue-600">
+              <i class='bx bx-log-in mr-1'></i>
+              <span>Login</span>
+            </a>
+          {% endif %}
+        </nav>
+
+        <!-- Tombol Burger Menu (Mobile) -->
+        <button class="md:hidden text-2xl burger-menu">
+          <i class="bx bx-menu"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="min-h-screen py-8 container mx-auto px-4" data-aos="fade-up">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-8">
+      <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+        <div>
+          <h4 class="font-semibold text-lg mb-2">Menu</h4>
+          <ul class="space-y-1">
+            <li><a href="{{ url_for('index') }}" class="hover:underline">Home</a></li>
+            <li><a href="{{ url_for('produk') }}" class="hover:underline">Paket Haji & Umroh</a></li>
+            <li><a href="{{ url_for('tentang') }}" class="hover:underline">Tentang Kami</a></li>
+            <li><a href="{{ url_for('galeri_jamaah') }}" class="hover:underline">Galeri Jamaah</a></li>
+            <li><a href="{{ url_for('testimoni') }}" class="hover:underline">Testimonial</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-lg mb-2">Hubungi Kami</h4>
+          <p><a href="https://wa.me/6285607094599" target="_blank" class="hover:underline flex items-center gap-2"><i class="bx bxl-whatsapp"></i> +62 856-0709-4599</a></p>
+          <p><a href="mailto:alfiraagus@gmail.com" class="hover:underline flex items-center gap-2"><i class="bx bx-envelope"></i> alfiraagus@gmail.com</a></p>
+          <p><a href="https://www.instagram.com/khodimulmuharamain" target="_blank" class="hover:underline flex items-center gap-2"><i class="bx bxl-instagram"></i> @khodimulmuharamain</a></p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-lg mb-2">Alamat</h4>
+          <p>
+            <a href="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d628897.8833630079!2d112.0178818!3d-7.5386579!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7873d0f2b993b3%3A0xb91e379bacc99b7d!2sKHODIMUL%20HARAMAIN%20(KH)%20Tour%20%26%20Travel!5e1!3m2!1sid!2ssg!4v1751277854938!5m2!1sid!2ss"
+              target="_blank" class="hover:underline flex items-center gap-2">
+              <i class="bx bx-map"></i> Grogol 03/02, Kehupondo, Kutorejo, Mojokerto
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+        once: true,
+      });
+    </script>
+
+    <!-- Dropdown Menu Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const adminBtn = document.getElementById('adminButton');
+        const dropdown = document.getElementById('adminDropdown');
+
+        adminBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function (e) {
+          if (!adminBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.add('hidden');
+          }
+        });
+      });
+    </script>
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
