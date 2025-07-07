@@ -302,5 +302,11 @@ def user_profile(token):
     except:
         return "Invalid link", 400
 
+
+@app.route('/healthz')
+def healthz():
+    return "OK", 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)
